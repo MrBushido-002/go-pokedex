@@ -3,8 +3,7 @@ package pokeapi
 import (
 	"net/http"
 	"time"
-
-	"github.com/Mr-Bushido/go-pokedex/internal/pokecache"
+	"github.com/MrBushido-002/go-pokedex/internal/pokecache"
 )
 
 // Client -

@@ -1,7 +1,9 @@
-package main
+package pokecache
 
 import (
     "testing"
+	"time"
+	"fmt"
 )
 
 

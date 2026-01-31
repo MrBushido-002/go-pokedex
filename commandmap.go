@@ -1,20 +1,20 @@
 package main
 
 import (
-	"errors"
 	"fmt"
+    "github.com/MrBushido-002/go-pokedex/internal/pokeapi"
 )
 
 func commandMap(cfg *config) error {
-	res := LocationAreaResponse{}
+	res := pokeapi.LocationAreaResponse{}
 	var err error
 	if cfg.Next == "" {
-		res, err = GetAreaLocation("")
+		res, err = cfg.pokeapiClient.GetAreaLocation(nil)
 		if err != nil {
 			return err
 		}
 	} else {
-		res, err = GetAreaLocation(cfg.Next)
+		res, err = cfg.pokeapiClient.GetAreaLocation(&cfg.Next)
 		if err != nil {
 			return err
 		}
@@ -28,14 +28,14 @@ func commandMap(cfg *config) error {
 }
 
 func commandMapb(cfg *config) error {
-	res := LocationAreaResponse{}
+	res := pokeapi.LocationAreaResponse{}
 	var err error
 	if cfg.Previous == "" {
 		fmt.Println("you're on the first page")
 			return nil
 		}
 
-	res, err = GetAreaLocation(cfg.Previous)
+	res, err = cfg.pokeapiClient.GetAreaLocation(&cfg.Previous)
 	if err != nil {
 		return err
 	}

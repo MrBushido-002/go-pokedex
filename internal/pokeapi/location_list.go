@@ -4,16 +4,17 @@ import(
 	"encoding/json"
 	"io"
 	"net/http"
+	
 )
 
-func (c *Client)GetAreaLocation(inputUrl string) (LocationAreaResponse, error) {
+func (c *Client)GetAreaLocation(inputURL *string) (LocationAreaResponse, error) {
 	var response LocationAreaResponse
-	url = baseUrl + "/location-area"
-	if inputUrl != nil {
-		url = inputUrl
+	URL := baseURL + "/location-area"
+	if inputURL != nil {
+		URL = *inputURL
 	}
 	
-	resp, ok := cache.Get(url)
+	resp, ok := c.cache.Get(URL)
 	if ok {
 		
 		if err := json.Unmarshal(resp, &response); err != nil {
@@ -23,7 +24,7 @@ func (c *Client)GetAreaLocation(inputUrl string) (LocationAreaResponse, error) {
 		
 	} else {
 
-		httpResp, err := http.Get(url)
+		httpResp, err := http.Get(URL)
 		if err != nil {
 			return LocationAreaResponse{}, err
 		}
@@ -34,8 +35,8 @@ func (c *Client)GetAreaLocation(inputUrl string) (LocationAreaResponse, error) {
 		if err != nil {
 			return LocationAreaResponse{}, err
 		}
-		
-		cache.Add(url, bodyBytes)
+	
+		c.cache.Add(URL, bodyBytes)
 		
 		if err := json.Unmarshal(bodyBytes, &response); err != nil {
 			return LocationAreaResponse{}, err

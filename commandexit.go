@@ -1,17 +1,12 @@
 package main
 
-import(
+import (
 	"fmt"
 	"os"
 )
 
-func commandHelp(cfg *config) error {
-	fmt.Printf(
-	`Welcome to the Pokedex!
-	Usage:
-	
-	help: Displays a help message
-	exit: Exit the Pokedex
-	`)
+func commandExit(cfg *config) error {
+	fmt.Println("Closing the Pokedex... Goodbye!")
+	os.Exit(0)
 	return nil
 }

@@ -11,15 +11,16 @@ import (
 
 type config struct {
 	pokeapiClient pokeapi.Client
-	Next string
-	Previous string
+	Next *string
+	Previous *string
+	caughtPokemon map[string]pokeapi.PokemonInfo
 }
 
 func startRepl(cfg *config) {
 	scanner := bufio.NewScanner(os.Stdin)
 
 
-	for i := 0; ;i++ {
+	for {
 		fmt.Print("Pokedex >")
 		scan := scanner.Scan()
 		if scan == true {
@@ -29,17 +30,18 @@ func startRepl(cfg *config) {
 				continue
 			}
 			cmd := clean_txt[0]
+			args := clean_txt[1:]
 
 			command, ok := getCommands()[cmd]
 			
 			if ok {
-				err := command.callback(cfg)
+				err := command.callback(cfg, args)
 				if err != nil {
 					fmt.Println(err)
 				}
 
 			} else {
-				fmt.Printf("Unknown command")
+				fmt.Println("Unknown command")
 			}
 		}
 		
@@ -57,7 +59,7 @@ func cleanInput(text string) ([]string) {
 type cliCommand struct {
 	Name string
 	description string
-	callback func(*config) error
+	callback func(*config, []string) error
 }
 
 
@@ -83,5 +85,26 @@ func getCommands() map[string]cliCommand {
 			description: "Exit the Pokedex",
 			callback:    commandExit,
 		},
+		"explore": {
+			Name:        "explore",
+			description: "Explore a location area for Pokémon",
+			callback:    commandExplore,
+		},
+		"catch": {
+			Name: "catch",
+			description: "Throw a pokeball for a chance to catch it and add it to your pokedex",
+			callback: commandCatch,
+		},
+		"inspect": {
+			Name: "inspect",
+			description: "inspect a pokemon if it has already been caught",
+			callback: commandInspect,
+		},
+		"pokedex": {
+			Name: "pokedex",
+			description: "lists all pokemon caught",
+			callback: commandPokedex,
+		},
+
 	}
 }

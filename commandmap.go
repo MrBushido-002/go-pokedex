@@ -5,16 +5,16 @@ import (
     "github.com/MrBushido-002/go-pokedex/internal/pokeapi"
 )
 
-func commandMap(cfg *config) error {
+func commandMap(cfg *config, args []string) error {
 	res := pokeapi.LocationAreaResponse{}
 	var err error
-	if cfg.Next == "" {
+	if cfg.Next == nil {
 		res, err = cfg.pokeapiClient.GetAreaLocation(nil)
 		if err != nil {
 			return err
 		}
 	} else {
-		res, err = cfg.pokeapiClient.GetAreaLocation(&cfg.Next)
+		res, err = cfg.pokeapiClient.GetAreaLocation(cfg.Next)
 		if err != nil {
 			return err
 		}
@@ -27,15 +27,15 @@ func commandMap(cfg *config) error {
 	return nil
 }
 
-func commandMapb(cfg *config) error {
+func commandMapb(cfg *config, args []string) error {
 	res := pokeapi.LocationAreaResponse{}
 	var err error
-	if cfg.Previous == "" {
+	if cfg.Previous == nil {
 		fmt.Println("you're on the first page")
 			return nil
 		}
 
-	res, err = cfg.pokeapiClient.GetAreaLocation(&cfg.Previous)
+	res, err = cfg.pokeapiClient.GetAreaLocation(cfg.Previous)
 	if err != nil {
 		return err
 	}
